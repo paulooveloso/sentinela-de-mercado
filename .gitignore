@@ -1,0 +1,12 @@
+# Ambientes Virtuais
+venv/
+env/
+
+# Banco de Dados Local
+*.db
+*.sqlite3
+
+# Arquivos do macOS e Python
+.DS_Store
+__pycache__/
+*.pyc
