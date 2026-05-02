@@ -1,8 +1,3 @@
-Sim, a sua parte de **Arquitetura de Dados e API Central** está com a base sólida e funcional concluída! Você já entregou o "coração" do projeto: o sistema que recebe, armazena e analisa os preços.
-
-Para a sua reunião com a equipe, preparei um **README estruturado** (que você pode copiar e transformar em um PDF ou colocar no GitHub do grupo). Ele explica tecnicamente o que foi feito e como os seus colegas vão se conectar ao seu trabalho.
-
----
 
 # 📑 Relatório Técnico: Backend - Sentinela de Mercado (v1.0)
 
