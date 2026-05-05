@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from . import models, database
 
@@ -11,7 +11,7 @@ app = FastAPI(title="Sentinela de Mercado API")
 def read_root():
     return {"mensagem": "API Sentinela de Mercado operando na porta 8001!"}
 
-# Rota INTELIGENTE para receber preços
+# CREATE - Rota INTELIGENTE para receber preços
 @app.post("/precos/")
 def criar_registro_preco(
     nome: str, 
@@ -50,14 +50,59 @@ def criar_registro_preco(
     db.commit()
     db.refresh(novo_registro)
 
-    # 4. Retorna a resposta com o alerta para o Bot do Telegram ler
+    # 4. Retorna a resposta com o alerta
     return {
         "alerta_queda": alerta_queda,
         "mensagem_alerta": mensagem,
         "dados_salvos": novo_registro
     }
 
-# Rota para o Dashboard
+# READ - Rota para listar TODOS os preços
 @app.get("/historico/")
 def listar_precos(db: Session = Depends(database.get_db)):
-    return db.query(models.ProdutoPreco).all()
+    return db.query(models.ProdutoPreco).all() 
+    
+# READ - Buscar apenas UM preço específico pelo ID
+@app.get("/precos/{preco_id}")
+def buscar_preco_por_id(preco_id: int, db: Session = Depends(database.get_db)):          
+    registro = db.query(models.ProdutoPreco).filter(models.ProdutoPreco.id == preco_id).first()
+    if not registro:
+        raise HTTPException(status_code=404, detail="Registro não encontrado.")
+    return registro
+
+# UPDATE - Atualizar um registro existente
+@app.put("/precos/{preco_id}")
+def atualizar_preco(
+    preco_id: int, 
+    novo_nome: str = None, 
+    novo_preco: float = None, 
+    db: Session = Depends(database.get_db)
+):
+    registro = db.query(models.ProdutoPreco).filter(models.ProdutoPreco.id == preco_id).first()
+    
+    if not registro:
+        raise HTTPException(status_code=404, detail="Registro não encontrado.")
+    
+    # Atualiza apenas os campos que foram enviados
+    if novo_nome:
+        registro.nome = novo_nome
+    if novo_preco:
+        registro.preco = novo_preco
+        
+    db.commit()
+    db.refresh(registro)
+    
+    return {"mensagem": "Registro atualizado com sucesso!", "dados_atualizados": registro}
+
+# DELETE - Apagar um registro do banco
+@app.delete("/precos/{preco_id}")
+def deletar_preco(preco_id: int, db: Session = Depends(database.get_db)):
+    registro = db.query(models.ProdutoPreco).filter(models.ProdutoPreco.id == preco_id).first()
+    
+    if not registro:
+        raise HTTPException(status_code=404, detail="Registro não encontrado.")
+    
+    db.delete(registro)
+    db.commit()
+    
+    return {"mensagem": f"O registro ID {preco_id} foi apagado do banco de dados."}
