@@ -1,4 +1,4 @@
-
+ 
 # 📑 Relatório Técnico: Backend - Sentinela de Mercado (v1.0)
 
 ## 🎯 Objetivo do Módulo

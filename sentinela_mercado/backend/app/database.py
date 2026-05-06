@@ -2,21 +2,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Nome do arquivo do banco de dados que será criado automaticamente
-SQLALCHEMY_DATABASE_URL = "sqlite:///./precos_mercado.db"
+# A sua URL mágica do PostgreSQL na nuvem (Render)
+SQLALCHEMY_DATABASE_URL = "postgresql://sentinela_db_wp51_user:COkMKd5UttRbCrEluyqRhI9tY6WdJ3ip@dpg-d7t8vmreo5us73ft1udg-a.oregon-postgres.render.com/sentinela_db_wp51"
 
-# Criando o motor de conexão (Corrigido para create_engine)
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+# O PostgreSQL não precisa daquele argumento "check_same_thread" que o SQLite usava
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
-# Criando a sessão que o backend usará para conversar com o banco
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Classe base que usaremos para criar nossas tabelas (Models)
 Base = declarative_base()
 
-# Função auxiliar para abrir/fechar a conexão automaticamente
 def get_db():
     db = SessionLocal()
     try:
