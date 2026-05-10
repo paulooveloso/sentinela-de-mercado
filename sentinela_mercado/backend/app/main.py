@@ -30,7 +30,7 @@ def criar_registro_preco(
     mensagem = "Preço cadastrado com sucesso."
 
     # 2. Verifica se o preço caiu
-    if ultimo_registro:
+    if ultimo_registro is not None:
         if preco < ultimo_registro.preco:
             alerta_queda = True
             mensagem = f"ALERTA: O preço caiu de R$ {ultimo_registro.preco} para R$ {preco}!"

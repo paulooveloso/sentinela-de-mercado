@@ -1,0 +1,6 @@
+{
+  "reportUnknownMemberType": "none",
+  "reportUntypedFunctionDecorator": "none",
+  "reportMissingModuleSource": "none",
+  "reportAttributeAccessIssue": "none"
+}
