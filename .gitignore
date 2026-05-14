@@ -10,8 +10,6 @@ env/
 .DS_Store
 __pycache__/
 *.pyc
-venv/
-__pycache__/
-*.pyc
-*.db
+
+# Variaveis de ambiente
 .env
